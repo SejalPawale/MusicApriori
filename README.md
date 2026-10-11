@@ -30,8 +30,7 @@ tunetrail/
 ├── tests/
 │   └── test_correctness.py       # Tests using hand-calculated examples
 ├── results/                      # Experiment outputs and visualizations
-└── report/
-    └── report.md                 # Project report
+
 ```
 
 ## Table of Contents
