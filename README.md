@@ -1,6 +1,6 @@
 # TuneTrail: Frequent Itemset Mining and Association Rule Analysis
 
-TuneTrail is a machine learning project that discovers songs that frequently appear together in user-curated Spotify playlists. It treats each playlist as a transaction and applies **Apriori** as the primary frequent-itemset mining algorithm. The resulting itemsets are used to generate association rules that can be evaluated using support, confidence, lift, and leverage.
+TuneTrail is a machine learning project that discovers songs that frequently appear together in user-curated Spotify playlists. It treats each playlist as a transaction and applies **Apriori** as the primary frequent-itemset mining algorithm. The resulting itemsets are used to generate association rules that can be evaluated using support, confidence, lift and leverage.
 
 **FP-Growth** is included as an alternative algorithm for comparison. The project focuses on interpreting playlist co-occurrence patterns rather than claiming that songs are acoustically similar or that one song causes a listener to prefer another.
 
@@ -51,7 +51,7 @@ tunetrail/
 ## Project Objectives
 
 - Convert playlist records into transactions suitable for association-rule mining.
-- Discover frequent tracks, track pairs, and larger combinations using Apriori.
+- Discover frequent tracks, track pairs and larger combinations using Apriori.
 - Generate readable association rules from frequent itemsets.
 - Evaluate patterns using support, confidence, lift, and leverage.
 - Explore how mining thresholds affect the number and strength of discovered patterns.
@@ -133,7 +133,7 @@ This example illustrates why measures should be considered together: the rule ha
 
 FP-Growth is included as a secondary algorithm for comparison. Instead of generating candidate itemsets level by level, it compresses transaction data into an FP-tree and mines frequent patterns from that structure.
 
-For a fair comparison, Apriori and FP-Growth should use the same prepared transactions and minimum-support threshold. Their frequent itemsets can be compared for agreement, and execution time can be recorded as a practical efficiency measure. The relative performance depends on the data and settings; no algorithm should be assumed to be faster in every case.
+For a fair comparison, Apriori and FP-Growth should use the same prepared transactions and minimum-support threshold. Their frequent itemsets can be compared for agreement and execution time can be recorded as a practical efficiency measure. The relative performance depends on the data and settings; no algorithm should be assumed to be faster in every case.
 
 ## Evaluation
 
