@@ -4,7 +4,7 @@ TuneTrail discovers musical affinities, co-occurrence patterns, and surprising c
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 tunetrail/
@@ -36,7 +36,7 @@ tunetrail/
 
 ---
 
-## ⚡ Quickstart Guide
+## Quickstart Guide
 
 ### 1. Environment Setup
 
@@ -100,7 +100,7 @@ Output files are saved to `tunetrail/results/`:
 
 ---
 
-## 📊 Core Concepts & Plain-Language Explanations
+## Core Concepts & Plain-Language Explanations
 
 * **Transaction Key**: Composite key `user_id + "|" + playlistname` prevents false merging of distinct users' generic playlists (*"Starred"*, *"Favorites"*).
 * **Track Token**: Cleaned `artist + " – " + track`.
