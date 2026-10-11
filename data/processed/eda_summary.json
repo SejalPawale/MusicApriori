@@ -1,0 +1,85 @@
+{
+  "raw_file": "spotify_dataset.csv",
+  "file_size_mb": 1127.23,
+  "total_rows_read": 12891570,
+  "bad_lines_dropped": 0,
+  "unique_users": 15914,
+  "unique_playlists": 231575,
+  "unique_tracks": 2789529,
+  "unique_artists": 289563,
+  "playlist_length": {
+    "min": 1,
+    "median": 16.0,
+    "p95": 175.0,
+    "p99": 627.0,
+    "max": 47362
+  },
+  "missing_values_per_column": {
+    "user_id": 0,
+    "artistname": 33572,
+    "trackname": 88,
+    "playlistname": 1253
+  },
+  "top_15_tracks": [
+    [
+      "M83 \u2013 Midnight City",
+      2609
+    ],
+    [
+      "Daft Punk \u2013 Get Lucky - Radio Edit",
+      2341
+    ],
+    [
+      "Imagine Dragons \u2013 Radioactive",
+      2336
+    ],
+    [
+      "Of Monsters and Men \u2013 Little Talks",
+      2254
+    ],
+    [
+      "Avicii \u2013 Wake Me Up",
+      2242
+    ],
+    [
+      "Lorde \u2013 Royals",
+      2219
+    ],
+    [
+      "The Lumineers \u2013 Ho Hey",
+      2180
+    ],
+    [
+      "Macklemore & Ryan Lewis \u2013 Can't Hold Us - feat. Ray Dalton",
+      2066
+    ],
+    [
+      "Bastille \u2013 Pompeii",
+      2014
+    ],
+    [
+      "Robin Thicke \u2013 Blurred Lines",
+      1996
+    ],
+    [
+      "Foster The People \u2013 Pumped up Kicks",
+      1903
+    ],
+    [
+      "Fun. \u2013 We Are Young (feat. Janelle Mon\u00e1e) - feat. Janelle Monae",
+      1855
+    ],
+    [
+      "Nirvana \u2013 Smells Like Teen Spirit",
+      1842
+    ],
+    [
+      "Gotye \u2013 Somebody That I Used To Know",
+      1807
+    ],
+    [
+      "Arctic Monkeys \u2013 Do I Wanna Know?",
+      1790
+    ]
+  ]
+}

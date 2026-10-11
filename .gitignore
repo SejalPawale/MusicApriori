@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+
+# Data files (keep directory structure, ignore raw CSV/zip)
+tunetrail/data/raw/*.csv
+tunetrail/data/raw/*.zip
+data/raw/*.csv
+data/raw/*.zip
+
+# Notebook checkpoints & test cache
+.ipynb_checkpoints
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS files
+.DS_Store
+Thumbs.db

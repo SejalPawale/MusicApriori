@@ -1,0 +1,16 @@
+{
+  "toy_test_status": "PASSED",
+  "independent_recount": {
+    "samples_checked": 20,
+    "mismatches": 0
+  },
+  "holdout_validation": {
+    "train_rules_count": 29,
+    "test_retention_pct": 100.0,
+    "mean_confidence_drop": 0.0245
+  },
+  "shuffled_baseline": {
+    "shuffled_pairs_count": 0,
+    "shuffled_rules_count": 0
+  }
+}

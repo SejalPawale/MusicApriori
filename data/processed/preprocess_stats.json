@@ -1,0 +1,23 @@
+{
+  "raw_file": "spotify_dataset.csv",
+  "raw_rows": 12891570,
+  "missing_values_dropped": 34856,
+  "user_sample_pct": 20.0,
+  "raw_unique_tracks": 949626,
+  "normalized_unique_tracks": 899790,
+  "variant_tracks_merged": 49836,
+  "intra_playlist_duplicates_removed": 29626,
+  "initial_playlists": 47043,
+  "playlist_length_cap_pct": 99,
+  "playlist_length_cap": 605,
+  "playlists_after_length_filter": 44459,
+  "duplicate_user_playlists_removed": 85,
+  "min_support_floor": 0.0005,
+  "min_count_floor": 23,
+  "max_items_cap": 20000,
+  "final_playlists": 23205,
+  "final_items": 8364,
+  "final_rows": 412549,
+  "matrix_sparsity": 0.9978744078288344,
+  "preprocessing_time_sec": 31.68
+}
