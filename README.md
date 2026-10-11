@@ -6,6 +6,8 @@ TuneTrail is a machine learning project that discovers songs that frequently app
 
 ## Project Structure
 
+'''
+
 tunetrail/
 ├── README.md                      # Project documentation and quickstart
 ├── requirements.txt               # Pinned dependencies
@@ -31,6 +33,8 @@ tunetrail/
 ├── results/                       # CSV sweeps, HTML charts, NetworkX graph figures
 └── report/
     └── report.md                  # Comprehensive academic/project report
+
+'''
 
 ## Table of Contents
 
