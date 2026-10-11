@@ -6,35 +6,33 @@ TuneTrail is a machine learning project that discovers songs that frequently app
 
 ## Project Structure
 
-'''
-
+```text
 tunetrail/
-├── README.md                      # Project documentation and quickstart
-├── requirements.txt               # Pinned dependencies
-├── .gitignore                     # Git rules (raw datasets & caches ignored)
+├── README.md                     # Project documentation
+├── requirements.txt              # Project dependencies
+├── .gitignore                    # Git rules for ignored files
 ├── data/
-│   ├── raw/                       # Place Kaggle CSV or ZIP here
-│   ├── processed/                 # Parquet outputs, CSR matrices, item metadata
-│   └── DATA_CARD.md               # Dataset provenance, schema, and filters
+│   ├── raw/                      # Raw Kaggle CSV or ZIP dataset
+│   ├── processed/                # Processed data and transaction matrices
+│   └── DATA_CARD.md              # Dataset source, schema, and filters
 ├── src/
-│   ├── config.py                  # Centralized tuning parameters & paths
-│   ├── 01_inspect.py              # Step 1: Chunked inspection & raw EDA
-│   ├── 02_preprocess.py           # Step 2: Text cleaning, filtering, matrix generation
-│   ├── preprocess.py              # Full preprocessing pipeline module
-│   ├── 03_mine_test.py            # Step 3: Quick CLI mining & recount verification
-│   ├── mining.py                  # Apriori & FP-Growth mining engine
-│   ├── rules.py                   # Plain-language generator & ranking filters
-│   ├── viz.py                     # Visualizations generator (Plotly, NetworkX)
-│   ├── experiments.py             # Parameter sweep grid & runtime benchmarks
-│   ├── evaluate.py                # Correctness tests, holdout, shuffled baseline
-│   └── generate_synthetic_data.py # Sample data generator for immediate testing
+│   ├── config.py                 # Configuration parameters and paths
+│   ├── 01_inspect.py             # Raw data inspection and exploration
+│   ├── 02_preprocess.py          # Data cleaning and matrix generation
+│   ├── preprocess.py             # Preprocessing pipeline
+│   ├── 03_mine_test.py           # Quick mining and recount verification
+│   ├── mining.py                 # Apriori and FP-Growth algorithms
+│   ├── rules.py                  # Association rule generation and ranking
+│   ├── viz.py                    # Visualizations and rule networks
+│   ├── experiments.py            # Parameter sweeps and runtime benchmarks
+│   ├── evaluate.py               # Correctness and robustness evaluation
+│   └── generate_synthetic_data.py # Synthetic sample data generator
 ├── tests/
-│   └── test_correctness.py        # Pytest suite with toy hand-computed assertions
-├── results/                       # CSV sweeps, HTML charts, NetworkX graph figures
+│   └── test_correctness.py       # Tests using hand-calculated examples
+├── results/                      # Experiment outputs and visualizations
 └── report/
-    └── report.md                  # Comprehensive academic/project report
-
-'''
+    └── report.md                 # Project report
+```
 
 ## Table of Contents
 
