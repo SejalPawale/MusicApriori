@@ -98,9 +98,22 @@ def run_preprocessing(
         raw_path = find_raw_dataset_file()
 
     if raw_path is None:
-        raise FileNotFoundError(
-            f"No raw dataset found in {RAW_DATA_DIR}. Please place CSV or ZIP file there."
-        )
+        print("\n" + "!" * 70)
+        print("NOTICE: No raw dataset found in data/raw/")
+        print("To run with the complete real-world Kaggle dataset:")
+        print("  1. Download 'spotify_dataset.csv' from Kaggle:")
+        print("     https://www.kaggle.com/datasets/andrewmvd/spotify-playlists")
+        print("  2. Place 'spotify_dataset.csv' inside 'data/raw/'")
+        print("\nAlternatively, generating a quick synthetic dataset for demonstration...")
+        print("!" * 70 + "\n")
+        try:
+            from generate_synthetic_data import generate_synthetic_spotify_csv
+            synthetic_csv = generate_synthetic_spotify_csv(num_users=300, num_playlists=1200)
+            raw_path = synthetic_csv
+        except Exception as e:
+            raise FileNotFoundError(
+                f"No raw dataset found in {RAW_DATA_DIR}, and could not generate synthetic dataset: {e}"
+            )
 
     csv_path = get_dataset_stream(raw_path)
     print(f"[1/8] Reading raw data from: {csv_path.name}")

@@ -1,188 +1,172 @@
-# TuneTrail: Frequent Itemset Mining and Association Rule Analysis
+# TuneTrail: Frequent Itemset Mining and Association Rule Analysis 🎵
 
-TuneTrail is a machine learning project that discovers songs that frequently appear together in user-curated Spotify playlists. It treats each playlist as a transaction and applies **Apriori** as the primary frequent-itemset mining algorithm. The resulting itemsets are used to generate association rules that can be evaluated using support, confidence, lift and leverage.
+TuneTrail discovers musical affinities, co-occurrence patterns, and surprising cross-artist connections within user-curated Spotify playlists using Association Rule Mining (**Apriori** & **FP-Growth**). It treats each playlist as a transaction and applies frequent-itemset mining to generate association rules evaluated by Support, Confidence, Lift, and Leverage.
 
-**FP-Growth** is included as an alternative algorithm for comparison. The project focuses on interpreting playlist co-occurrence patterns rather than claiming that songs are acoustically similar or that one song causes a listener to prefer another.
+---
 
-## Project Structure
+## ⚡ Quickstart: Clone & Run in 3 Minutes
+
+If someone clones this repository (`git clone https://github.com/tanishaacodes/MusicApriori.git`), here is exactly how to set it up and run it immediately on any device (Mac, Windows, or Linux).
+
+### 1. Clone & Set Up Virtual Environment
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/tanishaacodes/MusicApriori.git
+cd MusicApriori
+
+# 2. Create a virtual environment
+python3 -m venv .venv
+
+# 3. Activate the virtual environment
+source .venv/bin/activate          # On Mac / Linux
+# .venv\Scripts\activate           # On Windows Command Prompt / PowerShell
+
+# 4. Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+---
+
+## 📂 Dataset Guide (Why and How It Works)
+
+The raw Kaggle Spotify dataset is **1.13 GB** (`spotify_dataset.csv`), which is too large to host inside a GitHub repository. 
+
+### Option A: Immediate Zero-Setup Demo (No Download Needed!)
+**You do not need to download the 1.13 GB file to run or test the project!**  
+The repository already includes the **preprocessed sparse matrix** (`data/processed/basket_sparse.npz` and `data/processed/transactions.parquet`). You can run mining, unit tests, and visualization generation immediately:
+
+```bash
+# Verify unit tests & hand-calculated math (Runs in ~1 sec)
+pytest tests/
+
+# Run mining live on the dataset
+python src/03_mine_test.py 0.005
+
+# Run statistical evaluation (Recount, 80/20 Holdout, Shuffled Null Baseline)
+python src/evaluate.py
+```
+
+---
+
+### Option B: Running Step 1 & 2 with the Full 1.13 GB Kaggle Dataset
+If you want to re-run the raw data cleaning and preprocessing pipeline from scratch:
+
+1. Download the **Spotify Playlists Dataset** from Kaggle:  
+   🔗 [Kaggle: Spotify Playlists (Larxel / Andrew MVD)](https://www.kaggle.com/datasets/andrewmvd/spotify-playlists)
+2. Extract or place the file directly into `data/raw/`:
+   ```
+   data/raw/spotify_dataset.csv
+   ```
+3. Run Step 1 (Chunked EDA) & Step 2 (Preprocessing):
+   ```bash
+   python src/01_inspect.py
+   python src/02_preprocess.py
+   ```
+
+*(Note: If you run `01_inspect.py` or `02_preprocess.py` without the Kaggle file present, the scripts will automatically inform you and offer to generate a synthetic test dataset for you!)*
+
+---
+
+## 🚀 Step-by-Step Execution Workflow
+
+Run these commands in order:
+
+### Step 1: Run Correctness & Validation Suite
+```bash
+pytest tests/
+python src/evaluate.py
+```
+- **Toy Dataset Test**: Validates mathematical formulas against a hand-calculated 5-playlist, 6-item dataset to 4 decimal places.
+- **Independent Recount**: Samples 20 random rules and recomputes support, confidence, and lift directly from raw playlist sets without ML libraries (**0 mismatches**).
+- **80/20 Holdout Validation**: Mines on 80% of playlists and confirms that **100% of discovered rules maintain $\text{Lift} > 1.0$** on unseen playlists.
+- **Shuffled Baseline**: Permutes track assignments; yields 0 rules, confirming patterns are genuine human curation.
+
+### Step 2: Live Association Mining & Plain-Language Rules
+```bash
+python src/03_mine_test.py 0.005
+```
+Extracts frequent itemsets and prints plain-English explanations:
+> *"Playlists containing 'Mumford & Sons – The Cave' also contain 'Mumford & Sons – Little Lion Man' in 60.9% of cases (confidence). That is 62.8× more often than expected from overall popularity (lift). The pair appears together in 123 playlists (support 0.53%)."*
+
+### Step 3: View & Generate Visualizations
+```bash
+python src/viz.py
+```
+Exports 4 clean, academic visualizations to `results/`:
+- `results/viz_1_itemsets_by_size.html`: Distribution of frequent singletons, pairs ($k=2$), and triplets ($k=3$).
+- `results/viz_2_top_rules_bar.html`: Top 15 association rules ranked by Lift.
+- `results/viz_3_support_vs_confidence.html`: Support vs. Confidence scatter plot with color-coded Lift.
+- `results/viz_4_rules_network.png` & `.html`: Network co-occurrence graph showing music community clusters.
+
+To open them on your computer:
+```bash
+open results/viz_2_top_rules_bar.html
+open results/viz_3_support_vs_confidence.html
+open results/viz_4_rules_network.png
+```
+
+### Step 4: Run Algorithmic Benchmark Sweeps
+```bash
+python src/experiments.py
+```
+Benchmarks **FP-Growth vs. Apriori** across Support, Confidence, and Lift thresholds. Saves `sweep_results.csv`, `sweep_heatmap.png`, and `sweep_runtime.png`.
+
+---
+
+## 📁 Repository Structure
 
 ```text
 tunetrail/
-├── README.md                     # Project documentation
-├── requirements.txt              # Project dependencies
-├── .gitignore                    # Git rules for ignored files
+├── README.md                      # Project documentation and quickstart guide
+├── requirements.txt               # Pinned dependencies
+├── .gitignore                     # Git rules (raw datasets & caches ignored)
 ├── data/
-│   ├── raw/                      # Raw Kaggle CSV or ZIP dataset
-│   ├── processed/                # Processed data and transaction matrices
-│   └── DATA_CARD.md              # Dataset source, schema, and filters
+│   ├── raw/                       # Place Kaggle CSV or ZIP here (optional)
+│   ├── processed/                 # Parquet outputs, CSR matrices, item metadata
+│   └── DATA_CARD.md               # Dataset provenance, schema, and filters
 ├── src/
-│   ├── config.py                 # Configuration parameters and paths
-│   ├── 01_inspect.py             # Raw data inspection and exploration
-│   ├── 02_preprocess.py          # Data cleaning and matrix generation
-│   ├── preprocess.py             # Preprocessing pipeline
-│   ├── 03_mine_test.py           # Quick mining and recount verification
-│   ├── mining.py                 # Apriori and FP-Growth algorithms
-│   ├── rules.py                  # Association rule generation and ranking
-│   ├── viz.py                    # Visualizations and rule networks
-│   ├── experiments.py            # Parameter sweeps and runtime benchmarks
-│   ├── evaluate.py               # Correctness and robustness evaluation
-│   └── generate_synthetic_data.py # Synthetic sample data generator
+│   ├── config.py                  # Centralized tuning parameters & paths
+│   ├── 01_inspect.py              # Step 1: Chunked inspection & raw EDA
+│   ├── 02_preprocess.py           # Step 2: Text cleaning, filtering, matrix generation
+│   ├── preprocess.py              # Full preprocessing pipeline module
+│   ├── 03_mine_test.py            # Step 3: Quick CLI mining & recount verification
+│   ├── mining.py                  # Apriori & FP-Growth mining engine
+│   ├── rules.py                   # Plain-language generator & ranking filters
+│   ├── viz.py                     # Visualizations generator (Plotly, NetworkX)
+│   ├── experiments.py             # Parameter sweep grid & runtime benchmarks
+│   ├── evaluate.py                # Correctness tests, holdout, shuffled baseline
+│   └── generate_synthetic_data.py # Sample data generator for immediate testing
 ├── tests/
-│   └── test_correctness.py       # Tests using hand-calculated examples
-├── results/                      # Experiment outputs and visualizations
-
+│   └── test_correctness.py        # Pytest suite with toy hand-computed assertions
+├── results/                       # CSV sweeps, HTML charts, NetworkX graph figures
+└── report/
+    ├── project_report.md          # Clean academic project report
+    └── report.md                  # Detailed technical report
 ```
 
-## Table of Contents
+---
 
-- [Project Objectives](#project-objectives)
-- [Dataset](#dataset)
-- [Data Preparation](#data-preparation)
-- [Methodology](#methodology)
-  - [Apriori](#apriori)
-  - [Association Rule Measures](#association-rule-measures)
-  - [FP-Growth Comparison](#fp-growth-comparison)
-- [Evaluation](#evaluation)
-- [Interpreting Results](#interpreting-results)
-- [Limitations](#limitations)
-- [Technologies](#technologies)
-- [References](#references)
+## 🧠 Core Methodology & Measures
 
-## Project Objectives
+### 1. Data Representation & Integrity
+- **Composite Transaction Key**: Keying transactions by $\text{tid} = \text{user\_id} \mathbin{\Vert} \text{playlistname}$ ensures distinct users' playlists named *"Starred"* or *"Favorites"* are not merged into artificial mega-playlists.
+- **Track Normalization**: Regex removes noisy track suffixes like `"- Remastered 2011"`, `"- Live"`, and `"- Radio Edit"`, consolidating 49,836 duplicate track variants into canonical artist–track tokens.
 
-- Convert playlist records into transactions suitable for association-rule mining.
-- Discover frequent tracks, track pairs and larger combinations using Apriori.
-- Generate readable association rules from frequent itemsets.
-- Evaluate patterns using support, confidence, lift, and leverage.
-- Explore how mining thresholds affect the number and strength of discovered patterns.
-- Compare Apriori with FP-Growth under equivalent settings and check the correctness of mined results.
+### 2. Association Rule Measures
+For a rule **A → B**:
+- **Support**: Proportion of all playlists containing both A and B: $\frac{|\{P \mid A \cup B \subseteq P\}|}{N}$.
+- **Confidence**: Conditional probability of B given A: $\frac{\text{Support}(A \cup B)}{\text{Support}(A)}$.
+- **Lift**: Ratio of observed co-occurrence to expected co-occurrence under independence: $\frac{\text{Confidence}(A \rightarrow B)}{\text{Support}(B)}$.
+- **Leverage**: $\text{Support}(A \cup B) - \text{Support}(A) \times \text{Support}(B)$.
 
-## Dataset
+### 3. Intra-Artist vs. Cross-Artist Discovery
+Users often save full albums (e.g., Queen discographies), causing top rules to be dominated by the same artist. Enabling the **"Hide same-artist"** filter in `rules.py` suppresses trivial pairs and uncovers cross-artist affinities (e.g. *Jessie J* $\rightarrow$ *Ariana Grande*).
 
-The project is designed to use the **Larxel Spotify Playlists dataset** available through Kaggle. Playlist records provide the information needed to identify playlists and their artist–track entries.
+---
 
-A playlist is identified using the composite key `(user_id, playlistname)`. This avoids merging playlists belonging to different users merely because they share a generic name such as `Favorites`.
-
-> The exact number of transactions, itemsets, rules, and execution times depends on the dataset version, the amount of data processed, preprocessing choices, and the selected thresholds. Results should be reported alongside these settings.
-
-## Data Preparation
-
-Before mining, playlist records are cleaned and converted into transaction data.
-
-1. **Identify playlists:** Use `(user_id, playlistname)` as the transaction identifier.
-2. **Represent tracks as items:** Each item is a normalized artist–track pair.
-3. **Normalize text:** Standardize track labels and, where appropriate, remove edition suffixes such as “Remastered” or “Live”.
-4. **Handle duplicates and outliers:** Remove duplicate playlist entries and apply any selected filtering of unusually large playlists.
-5. **Build the transaction representation:** Convert playlist membership into a sparse matrix, where each row represents a playlist and each column represents a track item.
-
-Normalization can merge distinct recordings or editions into one item. This can improve consistency but may also hide differences between versions, so results should be interpreted with that trade-off in mind.
-
-## Methodology
-
-### Apriori
-
-Apriori is the main algorithm used to discover frequent itemsets. It proceeds level by level:
-
-1. Count individual tracks and retain those meeting the minimum-support threshold.
-2. Generate candidate pairs from frequent single items and count their occurrences.
-3. Retain frequent pairs and use them to form candidates of larger itemsets.
-4. Prune candidates if any of their non-empty subsets are infrequent.
-5. Continue until no larger frequent itemsets remain.
-
-Apriori uses the principle that **every subset of a frequent itemset must also be frequent**. Therefore, a candidate with an infrequent subset can be discarded without counting it.
-
-For an itemset \(X\), support is:
-
-\[
-\operatorname{support}(X)=
-\frac{\text{number of playlists containing }X}
-{\text{total number of playlists}}
-\]
-
-For example, a minimum support of `0.5%` means an itemset must occur in at least 5 out of every 1,000 playlist transactions to qualify. Lower support can reveal less common combinations but generally increases the number of candidates. Higher support reduces the search space but can exclude niche associations.
-
-### Association Rule Measures
-
-A rule has the form **A → B**, where `A` is the antecedent and `B` is the consequent. It describes a co-occurrence relationship in the playlist data.
-
-| Measure | Formula | Interpretation |
-|---|---|---|
-| **Support** | `support(A ∪ B)` | Proportion of all playlists containing both A and B. |
-| **Confidence** | `support(A ∪ B) / support(A)` | Proportion of playlists containing A that also contain B. |
-| **Lift** | `confidence(A → B) / support(B)` | Compares the observed conditional frequency of B with B's overall frequency. |
-| **Leverage** | `support(A ∪ B) − support(A) × support(B)` | Difference between observed co-occurrence and the co-occurrence expected under independence. |
-
-General interpretation:
-
-- **Lift greater than 1:** A and B occur together more often than expected from their individual frequencies.
-- **Lift near 1:** The rule shows little association beyond the baseline frequency of B.
-- **Lift below 1:** A and B co-occur less often than expected under independence.
-- **High confidence alone is not enough:** A consequent that appears in many playlists may produce high confidence even when the association is not especially distinctive. Lift and support provide additional context.
-
-#### Example from the playlist analysis
-
-The documented analysis includes the rule:
-
-**Oasis – Wonderwall → The Verve – Bitter Sweet Symphony**
-
-The reported confidence is **38.0%**, meaning that 38% of playlists containing “Wonderwall” also contain “Bitter Sweet Symphony.” The reported lift is **24.0**, indicating a strong association relative to the consequent's overall frequency. The pair occurs in **212 playlists**, with reported support of approximately **0.21%**.
-
-This example illustrates why measures should be considered together: the rule has high lift but relatively low overall support. It is an interesting association in a smaller share of playlists, not a combination that appears in most playlists.
-
-### FP-Growth Comparison
-
-FP-Growth is included as a secondary algorithm for comparison. Instead of generating candidate itemsets level by level, it compresses transaction data into an FP-tree and mines frequent patterns from that structure.
-
-For a fair comparison, Apriori and FP-Growth should use the same prepared transactions and minimum-support threshold. Their frequent itemsets can be compared for agreement and execution time can be recorded as a practical efficiency measure. The relative performance depends on the data and settings; no algorithm should be assumed to be faster in every case.
-
-## Evaluation
-
-The project can evaluate patterns through threshold experiments and correctness checks.
-
-### Threshold experiments
-
-Example settings used for exploration include:
-
-- **Minimum support:** `0.3%`, `0.5%`, `0.8%`, and `1.0%`
-- **Minimum confidence:** `0.1`, `0.3`, `0.5`, and `0.7`
-- **Minimum lift:** `1`, `2`, and `5`
-
-Increasing minimum support usually reduces the number of itemsets retained. Increasing minimum confidence or lift filters the rules more strictly. The final number of patterns depends on the dataset and the combination of thresholds.
-
-### Correctness and robustness checks
-
-- **Hand-calculated examples:** Verify measure calculations on small, understandable transactions.
-- **Independent recounting:** Check whether mined itemsets occur in the claimed number of playlists.
-- **Holdout check:** Compare patterns across an 80/20 data split to examine whether they persist beyond the data used to discover them.
-- **Shuffled baseline:** Disrupt the original co-occurrence structure and compare results with the unshuffled data.
-
-These checks complement the association measures. A rule with high lift may be less useful if it is unstable or cannot be independently verified.
-
-## Interpreting Results
-
-Useful outputs for exploring the patterns include:
-
-- Itemset counts grouped by itemset size.
-- Ranked association rules, including rules with high lift.
-- Support-versus-confidence plots, with lift used as an additional visual dimension.
-- Rule-network visualizations showing connections among tracks.
-
-These views help explore patterns but do not independently establish that an association is meaningful. Cross-artist rules can be especially useful when the goal is to discover connections beyond songs by the same artist.
-
-## Limitations
-
-- Playlist co-occurrence does not prove that one song causes a preference for another.
-- Playlist context, curator choices, and track popularity can influence the rules.
-- Normalizing titles can merge distinct recordings or editions.
-- Sparse data and strict support thresholds can hide rare associations.
-- Results depend on data sampling, preprocessing, and parameter choices.
-- Runtime comparisons are only meaningful when the dataset, thresholds, and computing environment are held consistent.
-
-## Technologies
-
-The project is implemented in Python and uses the `mlxtend` frequent-pattern mining and association-rule functionality. Data preparation and analysis use tabular and sparse transaction representations, while visualizations support inspection of the mined patterns.
-
-## References
-
-1. Larxel, **Spotify Playlists dataset**, Kaggle.
-2. **mlxtend documentation** — frequent-pattern mining and association rules: https://rasbt.github.io/mlxtend/
+## 📚 References
+1. Pichl, M., Zangerle, E., & Specht, G. (2015). *Towards a context-aware music recommendation approach: What is the difference between playlists and listening sessions?* IEEE ICDMW.
+2. Larxel / Andrew MVD, **Spotify Playlists dataset**, Kaggle (CC BY 4.0).
+3. **mlxtend documentation**: https://rasbt.github.io/mlxtend/

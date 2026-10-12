@@ -26,12 +26,20 @@ def inspect_dataset(raw_path=None, chunk_size=500_000):
         raw_path = find_raw_dataset_file()
 
     if raw_path is None:
-        print("\n" + "=" * 70)
-        print("ERROR: No raw dataset found!")
-        print(f"Please place your Kaggle CSV or ZIP file into:\n  {RAW_DATA_DIR.resolve()}")
-        print("Examples: spotify_dataset.csv, 2023_spotify_ds1.csv, or archive.zip")
-        print("=" * 70 + "\n")
-        return None
+        print("\n" + "!" * 70)
+        print("NOTICE: No raw dataset found in data/raw/")
+        print("To inspect the complete real-world Kaggle dataset:")
+        print("  1. Download 'spotify_dataset.csv' from Kaggle:")
+        print("     https://www.kaggle.com/datasets/andrewmvd/spotify-playlists")
+        print("  2. Place 'spotify_dataset.csv' inside 'data/raw/'")
+        print("\nAlternatively, generating a quick synthetic dataset for demonstration...")
+        print("!" * 70 + "\n")
+        try:
+            from generate_synthetic_data import generate_synthetic_spotify_csv
+            raw_path = generate_synthetic_spotify_csv(num_users=300, num_playlists=1200)
+        except Exception as e:
+            print(f"Error generating synthetic dataset: {e}")
+            return None
 
     csv_path = get_dataset_stream(raw_path)
     print(f"\n[inspect] Target CSV: {csv_path}")
